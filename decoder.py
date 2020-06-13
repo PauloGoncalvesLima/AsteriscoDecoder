@@ -2,43 +2,61 @@ import re
 import praw
 import colorit
 import time
+import textCleaner
 
 
 subreddits = ['desabafos', 'brasil', 'Dota2Brasil']
 total = 0
 reddit = praw.Reddit('BotCrawler')
 
-palavrasConhecidas = dict()
+palavrasConhecidas = set()
+sentenceFile = open("./redditSentences.txt",'a')
 
-with open("") as f:
+with open("./cleanWords.txt", encoding="utf8") as f:
     for line in f:
-       (key, val) = line.split()
-       d[int(key)] = val
+       palavrasConhecidas.add(line)
+f.close()
 
 def wait(time2wait):
     if(time2wait >= 60):
-        total = 0
-        time.sleep(time2wait) 
+        print("esperando 60s")
+        time.sleep(time2wait)
+        time2wait = 0
 
+def placeInSet(text):
+    for word in text.split():
+        palavrasConhecidas.add(word)
 
+progress = 0
 # for subs in subreddits:
-for submission in reddit.subreddit('desabafos').hot(limit= 1):
+for submission in reddit.subreddit('desabafos').hot(limit= 25):
+    progress += 1
+    print(str(progress) + "/25")
     total += 1
     wait(total)
-    text = fixString(submission.selftext)
-    print(colorit.color_front (text, 255,255,0))
+    for sentence in textCleaner.clear(submission.selftext):
+        placeInSet(sentence)
+        sentenceFile.write(sentence + '\n')
+
+    # print(colorit.color_front (text, 255,255,0))
 
     submission.comments.replace_more(limit=None)
     comment_queue = submission.comments[:]  # Seed with top-level
     while comment_queue:
         comment = comment_queue.pop(0)
-        text = fixString(comment.body)
-        print(text)
+        for sentence in textCleaner.clear(comment.body):
+            placeInSet(sentence)
+            sentenceFile.write(sentence + '\n')
+        # print(text)
         comment_queue.extend(comment.replies)
-        total += 1
-        wait(total)
+        # total += 1
+        # wait(total)
 
+sentenceFile.close()
 
+wordFile = open("./cleanWords.txt", 'w')
+for w in palavrasConhecidas:
+    wordFile.write(w)
 
 
 
