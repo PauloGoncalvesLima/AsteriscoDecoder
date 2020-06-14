@@ -1,4 +1,5 @@
 import numpy
+import random
 from tensorflow.keras.models import Sequential # RecurrentNeuralNetwork
 from tensorflow.keras.layers import Dense # Don't be dense
 from tensorflow.keras.layers import Dropout # Prevents Overfitting
@@ -11,15 +12,22 @@ from tensorflow.keras.callbacks import ModelCheckpoint # Checkpoint System
 # tamanho do n-gram
 NGRAM = 3
 
+rand_num_array = []
+for i in range(1000):
+    rand_num_array.append(random.randrange(0,36000))
+
+sentencesUsed = open('./texts/usedSentences.txt', 'w')
+
 # carregar frases
 sentences = []
 with open('./texts/redditSentences.txt', 'r') as sentenceFile:
     i = 0
     for line in sentenceFile:
-        sentences.append(line)
+        if i in rand_num_array:
+            sentences.append(line)
+            sentencesUsed.write(line)
         i += 1
-        if i > 1000:
-            break
+sentencesUsed.close()
 
 # words = []
 # with open('./texts/cleanWords.txt', 'r') as wordFile:
@@ -92,4 +100,4 @@ checkpoint = ModelCheckpoint(
 )
 callbacks_list = [checkpoint]
 
-model.fit(rnnInput, rnnOutput, epochs=50, callbacks=callbacks_list)
+model.fit(rnnInput, rnnOutput, epochs=200, callbacks=callbacks_list)
