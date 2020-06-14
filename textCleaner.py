@@ -33,7 +33,7 @@ def clear(completeText):
     subPontuacao = r'([\.\!\?])[\.\!\?\s]*'
     completeText = re.sub(subPontuacao, r'\1', completeText)
 
-    completeText = re.sub(r"([\.\,\!\?\;\:])", r'\1', completeText)
+    completeText = re.sub(r"([\,\;\:])", r' \1 ', completeText)
 
     completeText = ' '.join(completeText.split()) # Tirar todos os espaços a mais
     pontuacao = r"([\.\!\?])"
