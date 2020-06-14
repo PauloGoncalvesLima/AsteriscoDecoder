@@ -1,6 +1,7 @@
 import re
 import unicodedata
 
+# ERROS
 # smiley :)
 # etc. (palavras com ponto)
 # subreddit (r/.....)
@@ -47,4 +48,3 @@ def clear(completeText):
         finalText.append(completeText[i] + ' ' + completeText[i+1])
 
     return finalText
-

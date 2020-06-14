@@ -10,9 +10,9 @@ total = 0
 reddit = praw.Reddit('BotCrawler')
 
 palavrasConhecidas = set()
-sentenceFile = open("./redditSentences.txt",'a')
+sentenceFile = open("./texts/redditSentences.txt",'a')
 
-with open("./cleanWords.txt", encoding="utf8") as f:
+with open("./texts/cleanWords.txt", encoding="utf8") as f:
     for line in f:
        palavrasConhecidas.add(line)
 f.close()
@@ -55,9 +55,10 @@ for submission in reddit.subreddit('desabafos').hot(limit= LIMIT):
 
 sentenceFile.close()
 
-wordFile = open("./cleanWords.txt", 'w')
+wordFile = open("./texts/cleanWords.txt", 'w')
 for w in palavrasConhecidas:
     wordFile.write(w)
+wordFile.close()
 
 
 
