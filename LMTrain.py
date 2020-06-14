@@ -1,12 +1,12 @@
 import numpy
-from keras.models import Sequential # RecurrentNeuralNetwork
-from keras.layers import Dense # Don't be dense
-from keras.layers import Dropout # Prevents Overfitting
-from keras.layers import LSTM # Long Short-Term Memory
-from keras.layers import BatchNormalization as BatchNorm
-from keras.layers import Activation # Activation Function
+from tensorflow.keras.models import Sequential # RecurrentNeuralNetwork
+from tensorflow.keras.layers import Dense # Don't be dense
+from tensorflow.keras.layers import Dropout # Prevents Overfitting
+from tensorflow.keras.layers import LSTM # Long Short-Term Memory
+from tensorflow.keras.layers import BatchNormalization as BatchNorm
+from tensorflow.keras.layers import Activation # Activation Function
 from keras.utils import np_utils # Categorize Data
-from keras.callbacks import ModelCheckpoint
+from tensorflow.keras.callbacks import ModelCheckpoint # Checkpoint System
 
 # tamanho do n-gram
 NGRAM = 3
@@ -14,8 +14,12 @@ NGRAM = 3
 # carregar frases
 sentences = []
 with open('./texts/redditSentences.txt', 'r') as sentenceFile:
+    i = 0
     for line in sentenceFile:
         sentences.append(line)
+        i += 1
+        if i > 1000:
+            break
 
 # words = []
 # with open('./texts/cleanWords.txt', 'r') as wordFile:
@@ -73,7 +77,7 @@ model.add(Activation('relu')) # regularization
 model.add(BatchNorm())
 model.add(Dropout(0.3))
 
-model.add(Dense(vocab))
+model.add(Dense(len(vocab)))
 model.add(Activation('softmax')) # softmax activation / crossentropy loss
 model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
 

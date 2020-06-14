@@ -130,3 +130,6 @@ dmypy.json
 
 # Reddit API Creds
 praw.ini
+
+# Checkpoints
+checkpoints/
