@@ -3,8 +3,8 @@ import praw
 import colorit
 import time
 import textCleaner
-
-
+#3629
+LIMIT = 5000
 subreddits = ['desabafos', 'brasil', 'Dota2Brasil']
 total = 0
 reddit = praw.Reddit('BotCrawler')
@@ -22,6 +22,7 @@ def wait(time2wait):
         print("esperando 60s")
         time.sleep(time2wait)
         time2wait = 0
+    return time2wait
 
 def placeInSet(text):
     for word in text.split():
@@ -29,11 +30,11 @@ def placeInSet(text):
 
 progress = 0
 # for subs in subreddits:
-for submission in reddit.subreddit('desabafos').hot(limit= 25):
+for submission in reddit.subreddit('desabafos').hot(limit= LIMIT):
     progress += 1
-    print(str(progress) + "/25")
+    print(str(progress) + "/" + str(LIMIT))
     total += 1
-    wait(total)
+    total = wait(total)
     for sentence in textCleaner.clear(submission.selftext):
         placeInSet(sentence)
         sentenceFile.write(sentence + '\n')
