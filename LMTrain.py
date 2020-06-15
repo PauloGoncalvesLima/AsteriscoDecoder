@@ -10,10 +10,10 @@ from keras.utils import np_utils # Categorize Data
 from tensorflow.keras.callbacks import ModelCheckpoint # Checkpoint System
 
 # tamanho do n-gram
-NGRAM = 3
+NGRAM = 50
 
 rand_num_array = []
-for i in range(1000):
+for i in range(100):
     rand_num_array.append(random.randrange(0,36000))
 
 sentencesUsed = open('./texts/usedSentences.txt', 'w')
@@ -35,14 +35,14 @@ sentencesUsed.close()
 #         line = line.strip()
 #         words.append(line)
 
-vocab = []
+vocab = set()
 for s in sentences:
-    words = s.split()
-    for w in words:
-        vocab.append(w)
+    for c in s:
+        vocab.add(c)
 
 # transformar vocabulario em int
-vocab = sorted(set(w for w in vocab))
+vocab = sorted(vocab)
+print(vocab)
 strToInt = dict((w, n) for n, w in enumerate(vocab))
 
 rnnInput = []
@@ -50,11 +50,10 @@ rnnOutput = []
 
 # gerar exemplos
 for s in sentences:
-    words = s.split()
-    for i in range(0, len(words) - NGRAM, 1):
-        inpSen = words[i:i + NGRAM]
-        outSen = words[i + NGRAM]
-        rnnInput.append([strToInt[w] for w in inpSen])
+    for i in range(0, len(s) - NGRAM, 1):
+        inpSen = s[i:i + NGRAM]
+        outSen = s[i + NGRAM]
+        rnnInput.append([strToInt[c] for c in inpSen])
         rnnOutput.append(strToInt[outSen])
 
 # formatar input e output
