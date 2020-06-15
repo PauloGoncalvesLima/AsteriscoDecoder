@@ -79,7 +79,7 @@ model.add(Dense(len(vocab)))
 model.add(Activation('softmax')) # softmax activation / crossentropy loss
 model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
 
-model.load_weights('./trainedModels/100SModel-200E-2.2356L.hdf5')
+model.load_weights('./trainedModels/check-87-0.9973.hdf5')
 
 generatedFile = open('./texts/generatedSentences.txt', 'w')
 # generate 100 sentences
